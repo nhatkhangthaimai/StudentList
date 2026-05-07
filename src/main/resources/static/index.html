@@ -2,158 +2,322 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản Lý Sinh Viên</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
 
-    <!-- Bootstrap & FontAwesome -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        body {
-            background: linear-gradient(135deg, #eef2ff, #f8f9fa);
-            font-family: "Segoe UI", sans-serif;
+
+        body{
+            background: #f5f7fb;
+            font-family: "Inter", sans-serif;
+            color: #1e293b;
         }
 
-        .container {
+        .container-box{
             max-width: 1100px;
+            margin: 60px auto;
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
-        .card {
-            border-radius: 20px;
-            border: none;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        .topbar{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
-        h2 {
+        .title{
+            font-size: 28px;
             font-weight: 700;
-            letter-spacing: 1px;
         }
 
-        .form-control {
-            border-radius: 12px;
+        .subtitle{
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 3px;
         }
 
-        .btn {
-            border-radius: 12px;
-        }
-
-        .table thead {
-            background: linear-gradient(135deg, #0d6efd, #6610f2);
+        .btn-add{
+            background: #111827;
             color: white;
-            text-transform: uppercase;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .btn-add:hover{
+            background: #000;
+        }
+
+        .search-box{
+            margin-bottom: 25px;
+        }
+
+        .search-input{
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #dbe2ea;
+        }
+
+        .table{
+            margin: 0;
+        }
+
+        .table thead{
+            background: #111827;
+            color: white;
+        }
+
+        .table thead th{
+            border: none;
+            padding: 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .table tbody td{
+            padding: 18px 16px;
+            vertical-align: middle;
+            border-color: #eef2f7;
+        }
+
+        .table tbody tr:hover{
+            background: #f8fafc;
+        }
+
+        .student{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar{
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .student-name{
+            font-weight: 600;
+        }
+
+        .student-id{
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .email{
+            color: #475569;
+        }
+
+        .btn-action{
+            border-radius: 8px;
+            padding: 5px 12px;
             font-size: 14px;
         }
 
-        .table tbody tr:hover {
-            background: #f1f5ff;
+        .modal-content{
+            border: none;
+            border-radius: 18px;
         }
+
+        .modal-header{
+            border: none;
+            padding: 22px 24px 10px;
+        }
+
+        .modal-body{
+            padding: 10px 24px 24px;
+        }
+
+        .form-control{
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .save-btn{
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .save-btn:hover{
+            background: black;
+        }
+
     </style>
 </head>
+
 <body>
 
-<div class="container py-5">
-    <div class="card p-4">
-        <h2 class="text-center text-primary mb-4">
-            <i class="fas fa-user-graduate"></i> QUẢN LÝ SINH VIÊN
-        </h2>
+<div class="container-box">
 
-        <!-- SEARCH + ADD -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text"
-                           id="searchInput"
-                           class="form-control"
-                           placeholder="Nhập tên sinh viên..."
-                           oninput="searchStudent()">
-                    <button class="btn btn-outline-primary" onclick="searchStudent()">
-                        <i class="fas fa-search"></i> Tìm kiếm
-                    </button>
-                </div>
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+        <div>
+            <div class="title">
+                Student Management
             </div>
 
-            <div class="col-md-6 text-end">
-                <button class="btn btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target="#studentModal"
-                        onclick="prepareAdd()">
-                    <i class="fas fa-plus-circle"></i> Thêm sinh viên mới
-                </button>
-            </div>
+            
         </div>
 
-        <!-- TABLE -->
-        <div class="table-responsive">
-            <table class="table table-hover align-middle" id="studentTable">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Họ và Tên</th>
-                    <th>Email</th>
-                    <th class="text-center">Thao tác</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <button class="btn-add"
+                data-bs-toggle="modal"
+                data-bs-target="#studentModal"
+                onclick="prepareAdd()">
+
+            + Add Student
+
+        </button>
+
     </div>
+
+    <!-- SEARCH -->
+    <div class="search-box">
+
+        <input type="text"
+               class="form-control search-input"
+               id="searchInput"
+               placeholder="Search student..."
+               oninput="searchStudent()">
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+
+        <table class="table align-middle"
+               id="studentTable">
+
+            <thead>
+            <tr>
+                <th>Student</th>
+                <th>Email</th>
+                <th width="160" class="text-center">
+                    Actions
+                </th>
+            </tr>
+            </thead>
+
+            <tbody></tbody>
+
+        </table>
+
+    </div>
+
 </div>
 
 <!-- MODAL -->
 <div class="modal fade" id="studentModal">
+
     <div class="modal-dialog">
+
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalTitle">Thông tin sinh viên</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
+
+            <div class="modal-header">
+
+                <h5 id="modalTitle">
+                    Add Student
+                </h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal"></button>
+
             </div>
 
             <div class="modal-body">
+
                 <form id="studentForm">
-                    <div class="mb-3" id="divIdField" style="display:none">
-                        <label>ID</label>
-                        <input type="number" id="s_id" class="form-control" disabled>
+
+                    <div id="divIdField"
+                         style="display:none">
+
+                        <input type="number"
+                               id="s_id"
+                               class="form-control mb-3"
+                               disabled>
+
                     </div>
 
                     <div class="mb-3">
-                        <label>Họ tên</label>
-                        <input type="text" id="s_name" class="form-control" required>
+
+                        <input type="text"
+                               id="s_name"
+                               class="form-control"
+                               placeholder="Student name"
+                               required>
+
                     </div>
 
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" id="s_email" class="form-control" required>
+                    <div class="mb-4">
+
+                        <input type="email"
+                               id="s_email"
+                               class="form-control"
+                               placeholder="Student email"
+                               required>
+
                     </div>
 
-                    <button class="btn btn-primary w-100" type="submit">
-                        Lưu dữ liệu
+                    <button class="save-btn">
+
+                        Save Student
+
                     </button>
+
                 </form>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
 
-<!-- Bootstrap JS -->
+<!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+
     const apiBase = "/api/students";
     let isEditMode = false;
 
-    /* LOAD LIST */
-    async function loadStudents() {
+    /* LOAD */
+    async function loadStudents(){
+
         const res = await fetch(apiBase);
         const data = await res.json();
+
         renderTable(data);
     }
 
-    /* SEARCH - FIXED */
-    async function searchStudent() {
-        const keyword = document.getElementById("searchInput").value.trim();
+    /* SEARCH */
+    async function searchStudent(){
 
-        // Không nhập gì -> load lại toàn bộ
-        if (keyword === "") {
+        const keyword =
+            document.getElementById("searchInput")
+            .value.trim();
+
+        if(keyword === ""){
             loadStudents();
             return;
         }
@@ -161,36 +325,59 @@
         const res = await fetch(
             `${apiBase}/search?keyword=${encodeURIComponent(keyword)}`
         );
+
         const data = await res.json();
+
         renderTable(data);
     }
 
     /* DELETE */
-    async function deleteStudent(id) {
-        if (!confirm("Xóa sinh viên ID " + id + "?")) return;
-        await fetch(`${apiBase}/delete/${id}`, { method: "POST" });
+    async function deleteStudent(id){
+
+        if(!confirm("Delete this student?"))
+            return;
+
+        await fetch(
+            `${apiBase}/delete/${id}`,
+            { method:"POST" }
+        );
+
         loadStudents();
     }
 
-    /* SUBMIT FORM */
-    document.getElementById("studentForm").onsubmit = async (e) => {
+    /* SUBMIT */
+    document.getElementById("studentForm").onsubmit = async (e)=>{
+
         e.preventDefault();
 
-        const id = document.getElementById("s_id").value;
+        const id =
+            document.getElementById("s_id").value;
+
         const student = {
-            name: document.getElementById("s_name").value,
-            email: document.getElementById("s_email").value
+
+            name:
+                document.getElementById("s_name").value,
+
+            email:
+                document.getElementById("s_email").value
         };
 
         let url = apiBase;
-        if (isEditMode) {
+
+        if(isEditMode){
+
             url = `${apiBase}/update/${id}`;
             student.id = id;
         }
 
-        await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+        await fetch(url,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
             body: JSON.stringify(student)
         });
 
@@ -201,54 +388,138 @@
         loadStudents();
     };
 
-    /* RENDER TABLE */
-    function renderTable(students) {
-        const tbody = document.querySelector("#studentTable tbody");
+    /* RENDER */
+    function renderTable(students){
 
-        if (!students || students.length === 0) {
-            tbody.innerHTML =
-                `<tr><td colspan="4" class="text-center">Không có dữ liệu</td></tr>`;
+        const tbody =
+            document.querySelector("#studentTable tbody");
+
+        if(!students || students.length === 0){
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="3"
+                        class="text-center p-5 text-muted">
+
+                        No students found
+
+                    </td>
+                </tr>
+            `;
+
             return;
         }
 
         tbody.innerHTML = students.map(s => `
+
             <tr>
-                <td>#${s.id}</td>
-                <td>${s.name}</td>
-                <td>${s.email}</td>
-                <td class="text-center">
-                    <button class="btn btn-warning btn-sm"
-                            onclick="prepareEdit(${s.id}, '${s.name}', '${s.email}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm"
-                            onclick="deleteStudent(${s.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+
+                <td>
+
+                    <div class="student">
+
+                        <div class="avatar">
+
+                            ${s.name.charAt(0).toUpperCase()}
+
+                        </div>
+
+                        <div>
+
+                            <div class="student-name">
+
+                                ${s.name}
+
+                            </div>
+
+                            <div class="student-id">
+
+                                ID #${s.id}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </td>
+
+                <td>
+
+                    <div class="email">
+
+                        ${s.email}
+
+                    </div>
+
+                </td>
+
+                <td class="text-center">
+
+                    <button class="btn btn-warning btn-sm btn-action"
+                            onclick="prepareEdit(
+                                ${s.id},
+                                '${s.name}',
+                                '${s.email}'
+                            )">
+
+                        Edit
+
+                    </button>
+
+                    <button class="btn btn-danger btn-sm btn-action"
+                            onclick="deleteStudent(${s.id})">
+
+                        Delete
+
+                    </button>
+
+                </td>
+
             </tr>
+
         `).join("");
     }
 
-    function prepareAdd() {
+    /* ADD */
+    function prepareAdd(){
+
         isEditMode = false;
+
         document.getElementById("studentForm").reset();
-        document.getElementById("divIdField").style.display = "none";
-        document.getElementById("modalTitle").innerText = "Thêm sinh viên mới";
+
+        document.getElementById("divIdField")
+            .style.display = "none";
+
+        document.getElementById("modalTitle")
+            .innerText = "Add Student";
     }
 
-    function prepareEdit(id, name, email) {
+    /* EDIT */
+    function prepareEdit(id,name,email){
+
         isEditMode = true;
-        document.getElementById("divIdField").style.display = "block";
+
+        document.getElementById("divIdField")
+            .style.display = "block";
+
         document.getElementById("s_id").value = id;
+
         document.getElementById("s_name").value = name;
+
         document.getElementById("s_email").value = email;
-        document.getElementById("modalTitle").innerText = "Chỉnh sửa sinh viên";
-        new bootstrap.Modal(document.getElementById("studentModal")).show();
+
+        document.getElementById("modalTitle")
+            .innerText = "Edit Student";
+
+        new bootstrap.Modal(
+            document.getElementById("studentModal")
+        ).show();
     }
 
     window.onload = loadStudents;
+
 </script>
 
 </body>
-</html>
+</html> 
